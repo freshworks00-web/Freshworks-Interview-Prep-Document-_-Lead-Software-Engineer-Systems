@@ -1,0 +1,609 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:transparent;color:var(--color-text-primary)}
+.guide{max-width:680px;margin:0 auto;padding:1.5rem 0}
+.hero{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:2rem 1.5rem 1.5rem;margin-bottom:1.5rem}
+.hero-eyebrow{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:.5rem}
+.hero-title{font-size:22px;font-weight:500;line-height:1.3;margin-bottom:.4rem}
+.hero-sub{font-size:14px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:1.2rem}
+.round-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.rtab{font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+.rtab.active,.rtab:hover{background:var(--color-background-primary);border-color:var(--color-border-primary);color:var(--color-text-primary)}
+.rtab.active{font-weight:500}
+.round-panel{display:none}
+.round-panel.active{display:block}
+.section-label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-tertiary);margin:1.5rem 0 .75rem}
+.round-header{display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:start;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1rem}
+.round-badge{width:48px;height:48px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:500;flex-shrink:0}
+.rh-title{font-size:16px;font-weight:500;margin-bottom:3px}
+.rh-sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:.6rem}
+.rh-tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;padding:3px 8px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary)}
+.expects-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem}
+.expect-card{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:1rem}
+.expect-label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.5rem;font-weight:500}
+.expect-item{font-size:13px;color:var(--color-text-secondary);line-height:1.6;display:flex;gap:6px;align-items:flex-start;margin-bottom:3px}
+.dot{width:4px;height:4px;border-radius:50%;flex-shrink:0;margin-top:7px}
+.dos-donts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem}
+.do-card{background:var(--color-background-success);border:0.5px solid var(--color-border-success);border-radius:var(--border-radius-md);padding:1rem}
+.dont-card{background:var(--color-background-danger);border:0.5px solid var(--color-border-danger);border-radius:var(--border-radius-md);padding:1rem}
+.dd-header{font-size:12px;font-weight:500;margin-bottom:.5rem;display:flex;align-items:center;gap:6px}
+.dd-item{font-size:13px;line-height:1.6;display:flex;gap:6px;align-items:flex-start;margin-bottom:3px}
+.dd-item .ti{font-size:13px;flex-shrink:0;margin-top:2px}
+.do-card .dd-header{color:var(--color-text-success)}
+.dont-card .dd-header{color:var(--color-text-danger)}
+.do-card .dd-item{color:var(--color-text-success)}
+.dont-card .dd-item{color:var(--color-text-danger)}
+.q-list{display:flex;flex-direction:column;gap:10px;margin-bottom:1rem}
+.q-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden}
+.q-head{display:flex;gap:10px;align-items:flex-start;padding:.85rem 1rem;cursor:pointer;user-select:none}
+.q-num{font-size:11px;font-weight:500;padding:2px 7px;border-radius:20px;flex-shrink:0;margin-top:1px}
+.q-text{font-size:14px;line-height:1.5;flex:1}
+.q-chevron{font-size:16px;color:var(--color-text-tertiary);flex-shrink:0;margin-top:1px;transition:transform .2s}
+.q-card.open .q-chevron{transform:rotate(180deg)}
+.q-body{display:none;border-top:0.5px solid var(--color-border-tertiary);padding:.85rem 1rem;background:var(--color-background-secondary)}
+.q-card.open .q-body{display:block}
+.q-approach-label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:.4rem;font-weight:500}
+.q-approach{font-size:13px;color:var(--color-text-secondary);line-height:1.7}
+.q-signals{margin-top:.75rem}
+.sig-row{display:flex;gap:6px;align-items:flex-start;margin-bottom:3px}
+.sig-label{font-size:11px;font-weight:500;flex-shrink:0;padding:2px 7px;border-radius:20px;margin-top:1px}
+.sig-text{font-size:12px;color:var(--color-text-secondary);line-height:1.6}
+.sig-good{background:var(--color-background-success);color:var(--color-text-success)}
+.sig-bad{background:var(--color-background-danger);color:var(--color-text-danger)}
+.hard-reject{background:var(--color-background-danger);border:0.5px solid var(--color-border-danger);border-radius:var(--border-radius-md);padding:.85rem 1rem;margin-bottom:1rem}
+.hr-label{font-size:11px;font-weight:500;color:var(--color-text-danger);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem;display:flex;align-items:center;gap:6px}
+.hr-item{font-size:13px;color:var(--color-text-danger);line-height:1.7;display:flex;gap:6px;align-items:flex-start;margin-bottom:2px}
+.star-card{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.85rem 1rem;margin-bottom:8px}
+.star-letter{font-size:15px;font-weight:500;margin-bottom:2px}
+.star-desc{font-size:13px;color:var(--color-text-secondary);line-height:1.5}
+.tips-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tip-card{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.85rem 1rem;display:flex;gap:10px;align-items:flex-start}
+.tip-icon{font-size:18px;flex-shrink:0;color:var(--color-text-secondary);margin-top:1px}
+.tip-text{font-size:13px;line-height:1.5;color:var(--color-text-secondary)}
+.tip-text strong{color:var(--color-text-primary);font-weight:500}
+@media(max-width:500px){.expects-grid,.dos-donts,.tips-grid{grid-template-columns:1fr}}
+</style>
+
+<div class="guide">
+<div class="hero">
+  <div class="hero-eyebrow">Freshworks · Interview preparation</div>
+  <div class="hero-title">Lead Software Engineer – Systems</div>
+  <div class="hero-sub">4 rounds, each testing a distinct dimension. Use the tabs below to explore what each panel expects, what to do and avoid, and sample questions with answer frameworks.</div>
+  <div class="round-tabs">
+    <div class="rtab active" onclick="switchTab('r1',this)">R1 · Coding</div>
+    <div class="rtab" onclick="switchTab('r2',this)">R2 · System Design</div>
+    <div class="rtab" onclick="switchTab('r3',this)">R3 · Production Depth</div>
+    <div class="rtab" onclick="switchTab('r4',this)">R4 · Hiring Manager</div>
+  </div>
+</div>
+
+<div id="r1" class="round-panel active">
+  <div class="round-header">
+    <div class="round-badge" style="background:#E6F1FB;color:#185FA5">R1</div>
+    <div>
+      <div class="rh-title">Coding — DSA + Concurrency</div>
+      <div class="rh-sub">60–90 min · 1–2 problems · Evaluated by a senior engineer</div>
+      <div class="rh-tags">
+        <span class="tag">Arrays & sliding window</span>
+        <span class="tag">LRU Cache</span>
+        <span class="tag">Concurrency (Go/Java)</span>
+        <span class="tag">Complexity analysis</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">What the panel is evaluating</div>
+  <div class="expects-grid">
+    <div class="expect-card">
+      <div class="expect-label" style="color:#185FA5">They want to see</div>
+      <div class="expect-item"><span class="dot" style="background:#185FA5"></span><span>Structured thought before typing a single line</span></div>
+      <div class="expect-item"><span class="dot" style="background:#185FA5"></span><span>Brute force → optimal progression explained aloud</span></div>
+      <div class="expect-item"><span class="dot" style="background:#185FA5"></span><span>Unprompted time & space complexity analysis</span></div>
+      <div class="expect-item"><span class="dot" style="background:#185FA5"></span><span>Edge case handling (empty, null, single element)</span></div>
+      <div class="expect-item"><span class="dot" style="background:#185FA5"></span><span>Clean, readable variable names and code structure</span></div>
+      <div class="expect-item"><span class="dot" style="background:#185FA5"></span><span>Ability to debug independently when stuck</span></div>
+    </div>
+    <div class="expect-card">
+      <div class="expect-label" style="color:#3B6D11">Concurrency depth</div>
+      <div class="expect-item"><span class="dot" style="background:#3B6D11"></span><span>Explain race conditions with a concrete example</span></div>
+      <div class="expect-item"><span class="dot" style="background:#3B6D11"></span><span>Mutex vs RWMutex — when and why</span></div>
+      <div class="expect-item"><span class="dot" style="background:#3B6D11"></span><span>Deadlock identification and resolution strategy</span></div>
+      <div class="expect-item"><span class="dot" style="background:#3B6D11"></span><span>Producer-consumer with backpressure handling</span></div>
+      <div class="expect-item"><span class="dot" style="background:#3B6D11"></span><span>Thread-safe data structures (not just "add a lock")</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">Do's and don'ts</div>
+  <div class="dos-donts">
+    <div class="do-card">
+      <div class="dd-header"><i class="ti ti-circle-check" aria-hidden="true"></i>Do this</div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>Restate the problem and clarify constraints first</span></div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>Say "brute force would be O(n²), but we can do better by…"</span></div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>State complexity after each approach, not just at the end</span></div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>Test with a small example before declaring done</span></div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>Explain your lock choice — don't just say "use a mutex"</span></div>
+    </div>
+    <div class="dont-card">
+      <div class="dd-header"><i class="ti ti-circle-x" aria-hidden="true"></i>Avoid this</div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>Starting to code before understanding the problem</span></div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>Skipping complexity — even partially optimal solutions need it</span></div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>Waiting to be asked about edge cases</span></div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>Writing unreadable one-letter variable names under pressure</span></div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>Saying "locks fix race conditions" with no further explanation</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">Sample questions — click to expand</div>
+  <div class="q-list">
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-head">
+        <span class="q-num" style="background:#E6F1FB;color:#185FA5">Q1</span>
+        <span class="q-text">Given an array of integers, return the product of all elements except self — without division, in O(n).</span>
+        <i class="ti ti-chevron-down q-chevron" aria-hidden="true"></i>
+      </div>
+      <div class="q-body">
+        <div class="q-approach-label">Approach</div>
+        <div class="q-approach">Build a prefix product array left→right, then multiply by the suffix product right→left in a second pass. The output array doubles as the prefix store — no extra space needed beyond that. O(n) time, O(1) auxiliary space.</div>
+        <div class="q-signals">
+          <div class="sig-row"><span class="sig-label sig-good">Strong</span><span class="sig-text">Mentions the two-pass prefix/suffix trick without hinting</span></div>
+          <div class="sig-row"><span class="sig-label sig-bad">Weak</span><span class="sig-text">Computes total product then divides — misses the constraint</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-head">
+        <span class="q-num" style="background:#E6F1FB;color:#185FA5">Q2</span>
+        <span class="q-text">Find the length of the longest substring without repeating characters. What's the most efficient approach?</span>
+        <i class="ti ti-chevron-down q-chevron" aria-hidden="true"></i>
+      </div>
+      <div class="q-body">
+        <div class="q-approach-label">Approach</div>
+        <div class="q-approach">Sliding window with a HashMap tracking last-seen index of each character. Move left pointer to last-seen+1 when a duplicate is found — skip characters, don't step one by one. O(n) time, O(min(m,n)) space where m = charset size.</div>
+        <div class="q-signals">
+          <div class="sig-row"><span class="sig-label sig-good">Strong</span><span class="sig-text">Jumps the left pointer directly (not stepwise), explains why</span></div>
+          <div class="sig-row"><span class="sig-label sig-bad">Weak</span><span class="sig-text">Uses a Set and steps left pointer one at a time — O(n²) worst case</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-head">
+        <span class="q-num" style="background:#E6F1FB;color:#185FA5">Q3</span>
+        <span class="q-text">Design an LRU Cache with O(1) get and put. Walk through your data structure choice and a thread-safe version.</span>
+        <i class="ti ti-chevron-down q-chevron" aria-hidden="true"></i>
+      </div>
+      <div class="q-body">
+        <div class="q-approach-label">Approach</div>
+        <div class="q-approach">HashMap + Doubly Linked List. HashMap gives O(1) key lookup, DLL gives O(1) move-to-front and evict-from-tail. For thread safety: a single Mutex works but serializes all access. RWMutex allows concurrent gets, exclusive puts — use when reads dominate. Discuss: if high-write traffic, per-shard locking avoids contention.</div>
+        <div class="q-signals">
+          <div class="sig-row"><span class="sig-label sig-good">Strong</span><span class="sig-text">Explains RWMutex tradeoff vs Mutex, mentions shard-level locking</span></div>
+          <div class="sig-row"><span class="sig-label sig-bad">Weak</span><span class="sig-text">Says "add a mutex" and moves on — no concurrency depth</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-head">
+        <span class="q-num" style="background:#E6F1FB;color:#185FA5">Q4</span>
+        <span class="q-text">Two goroutines each hold a lock and wait for the other's lock. Diagnose and fix the deadlock.</span>
+        <i class="ti ti-chevron-down q-chevron" aria-hidden="true"></i>
+      </div>
+      <div class="q-body">
+        <div class="q-approach-label">Approach</div>
+        <div class="q-approach">Classic circular-wait deadlock. Three fixes: (1) enforce a global lock ordering — always acquire lock A before lock B. (2) tryLock with timeout + backoff — release what you hold and retry. (3) redesign to remove the dependency between the two locks entirely. Detection in Go: go tool trace or deadlock detector libraries.</div>
+        <div class="q-signals">
+          <div class="sig-row"><span class="sig-label sig-good">Strong</span><span class="sig-text">Gives all three strategies and explains when each applies</span></div>
+          <div class="sig-row"><span class="sig-label sig-bad">Weak</span><span class="sig-text">Says "don't use two locks" — correct but no actionable fix</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hard-reject">
+    <div class="hr-label"><i class="ti ti-alert-triangle" aria-hidden="true"></i>Hard reject criteria</div>
+    <div class="hr-item"><i class="ti ti-x" aria-hidden="true"></i><span>Cannot solve a medium-level DSA problem independently, even with hints</span></div>
+    <div class="hr-item"><i class="ti ti-x" aria-hidden="true"></i><span>No awareness of time/space complexity trade-offs</span></div>
+    <div class="hr-item"><i class="ti ti-x" aria-hidden="true"></i><span>Cannot explain what a race condition is with a concrete example</span></div>
+  </div>
+</div>
+
+<div id="r2" class="round-panel">
+  <div class="round-header">
+    <div class="round-badge" style="background:#EAF3DE;color:#3B6D11">R2</div>
+    <div>
+      <div class="rh-title">System Design — High-Level Design (HLD)</div>
+      <div class="rh-sub">60 min · One open-ended design problem · Determines architectural maturity</div>
+      <div class="rh-tags">
+        <span class="tag">Requirement clarification</span>
+        <span class="tag">Scalability layers</span>
+        <span class="tag">Data modeling</span>
+        <span class="tag">Multi-tenant</span>
+        <span class="tag">Failure handling</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">What the panel is evaluating</div>
+  <div class="expects-grid">
+    <div class="expect-card">
+      <div class="expect-label" style="color:#3B6D11">Architecture judgment</div>
+      <div class="expect-item"><span class="dot" style="background:#3B6D11"></span><span>Gathers functional + non-functional requirements before drawing anything</span></div>
+      <div class="expect-item"><span class="dot" style="background:#3B6D11"></span><span>Estimates QPS, data size, latency targets explicitly</span></div>
+      <div class="expect-item"><span class="dot" style="background:#3B6D11"></span><span>Separates read path from write path in designs</span></div>
+      <div class="expect-item"><span class="dot" style="background:#3B6D11"></span><span>Explains caching strategy with TTL reasoning and invalidation</span></div>
+      <div class="expect-item"><span class="dot" style="background:#3B6D11"></span><span>Thinks in scale layers: cache → replica → shard → partition</span></div>
+    </div>
+    <div class="expect-card">
+      <div class="expect-label" style="color:#854F0B">Multi-tenant + reliability</div>
+      <div class="expect-item"><span class="dot" style="background:#854F0B"></span><span>Addresses tenant isolation — noisy neighbor, resource quotas</span></div>
+      <div class="expect-item"><span class="dot" style="background:#854F0B"></span><span>Identifies single points of failure proactively</span></div>
+      <div class="expect-item"><span class="dot" style="background:#854F0B"></span><span>Circuit breaker, retry with backoff, idempotency keys</span></div>
+      <div class="expect-item"><span class="dot" style="background:#854F0B"></span><span>Indexing strategy with composite keys and partition awareness</span></div>
+      <div class="expect-item"><span class="dot" style="background:#854F0B"></span><span>Observability: logs, metrics, distributed tracing, alerts</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">Do's and don'ts</div>
+  <div class="dos-donts">
+    <div class="do-card">
+      <div class="dd-header"><i class="ti ti-circle-check" aria-hidden="true"></i>Do this</div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>Spend 5–8 min clarifying — don't design a phantom problem</span></div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>Put numbers to your design: "at 10K QPS, one Redis node suffices"</span></div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>Call out SPOFs yourself and explain how you'd address them</span></div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>State tradeoffs explicitly: "we chose eventual consistency here because…"</span></div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>Mention multi-tenant isolation even if not prompted</span></div>
+    </div>
+    <div class="dont-card">
+      <div class="dd-header"><i class="ti ti-circle-x" aria-hidden="true"></i>Avoid this</div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>Drawing the architecture before asking a single question</span></div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>"We'll scale horizontally" — say what exactly scales and why</span></div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>No failure handling — systems always need a Plan B</span></div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>Over-engineering without justification (Kafka for 100 users/day)</span></div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>Ignoring observability — prod systems must be debuggable</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">Sample questions — click to expand</div>
+  <div class="q-list">
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-head">
+        <span class="q-num" style="background:#EAF3DE;color:#3B6D11">Q1</span>
+        <span class="q-text">Design a distributed rate limiter that supports multiple algorithms and works across a fleet of API servers serving 70,000+ tenants.</span>
+        <i class="ti ti-chevron-down q-chevron" aria-hidden="true"></i>
+      </div>
+      <div class="q-body">
+        <div class="q-approach-label">Key areas to hit</div>
+        <div class="q-approach">Clarify: per-user vs global limit, algorithm (token bucket vs sliding window), strict vs eventual consistency. Design: Redis with Lua scripts for atomic counter increment. Sliding window log in Redis sorted sets. Hot key problem for viral tenants — use local in-memory fallback with async Redis sync. Multi-region: tradeoff between strict (cross-region Pub/Sub) vs eventual (local counters, accept ~5% overage).</div>
+        <div class="q-signals">
+          <div class="sig-row"><span class="sig-label sig-good">Strong</span><span class="sig-text">Identifies hot key problem for large tenants without prompting</span></div>
+          <div class="sig-row"><span class="sig-label sig-bad">Weak</span><span class="sig-text">Just says "Redis counter + TTL" — misses atomicity and multi-region</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-head">
+        <span class="q-num" style="background:#EAF3DE;color:#3B6D11">Q2</span>
+        <span class="q-text">Design a notification service that delivers emails, SMS, and webhooks at scale with guaranteed delivery and configurable retry policies.</span>
+        <i class="ti ti-chevron-down q-chevron" aria-hidden="true"></i>
+      </div>
+      <div class="q-body">
+        <div class="q-approach-label">Key areas to hit</div>
+        <div class="q-approach">Write path: API → Kafka (per-channel topics for email/SMS/webhook). Worker pools per channel consume and call providers. Reliability: retry with exponential backoff + jitter, dead-letter queue after max attempts. Idempotency: notification_id deduplicates across retries. Observability: delivery rate per channel, P99 latency, per-tenant failure breakdown. Schema: notification(id, tenant_id, channel, payload, status, retry_count, next_retry_at).</div>
+        <div class="q-signals">
+          <div class="sig-row"><span class="sig-label sig-good">Strong</span><span class="sig-text">Mentions DLQ and idempotency key without being asked</span></div>
+          <div class="sig-row"><span class="sig-label sig-bad">Weak</span><span class="sig-text">Designs a generic API with no retry or delivery guarantee strategy</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-head">
+        <span class="q-num" style="background:#EAF3DE;color:#3B6D11">Q3</span>
+        <span class="q-text">How would you prevent a cache stampede when your Redis TTL expires and thousands of requests simultaneously hit the DB?</span>
+        <i class="ti ti-chevron-down q-chevron" aria-hidden="true"></i>
+      </div>
+      <div class="q-body">
+        <div class="q-approach-label">Key areas to hit</div>
+        <div class="q-approach">Three strategies: (1) Mutex on cache miss — one request fetches, rest wait (simple but adds latency). (2) Probabilistic early expiration — recompute the cache slightly before TTL expires based on fetch cost + random factor. (3) Stale-while-revalidate — serve stale immediately, trigger async background refresh. Discuss: for read-heavy systems, option 3 minimizes latency impact. Add jitter to TTLs to prevent synchronized expiration across keys.</div>
+        <div class="q-signals">
+          <div class="sig-row"><span class="sig-label sig-good">Strong</span><span class="sig-text">Knows all three techniques and when to use each</span></div>
+          <div class="sig-row"><span class="sig-label sig-bad">Weak</span><span class="sig-text">Only knows mutex approach — misses stale-while-revalidate</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hard-reject">
+    <div class="hr-label"><i class="ti ti-alert-triangle" aria-hidden="true"></i>Hard reject criteria</div>
+    <div class="hr-item"><i class="ti ti-x" aria-hidden="true"></i><span>No scaling strategy — cannot explain what happens beyond 1K QPS</span></div>
+    <div class="hr-item"><i class="ti ti-x" aria-hidden="true"></i><span>Zero failure handling — no circuit breaker, retry, or fallback thinking</span></div>
+    <div class="hr-item"><i class="ti ti-x" aria-hidden="true"></i><span>Pure textbook answer with no practical or production grounding</span></div>
+  </div>
+</div>
+
+<div id="r3" class="round-panel">
+  <div class="round-header">
+    <div class="round-badge" style="background:#FAEEDA;color:#854F0B">R3</div>
+    <div>
+      <div class="rh-title">Advanced Design + Production Depth</div>
+      <div class="rh-sub">60 min · Scenario-based · Tests real-world systems maturity</div>
+      <div class="rh-tags">
+        <span class="tag">Incident debugging</span>
+        <span class="tag">Scale evolution</span>
+        <span class="tag">Multi-region</span>
+        <span class="tag">Cost tradeoffs</span>
+        <span class="tag">Resource exhaustion</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">What the panel is evaluating</div>
+  <div class="expects-grid">
+    <div class="expect-card">
+      <div class="expect-label" style="color:#854F0B">Production mindset</div>
+      <div class="expect-item"><span class="dot" style="background:#854F0B"></span><span>Hypothesis-first debugging — form a theory before checking logs</span></div>
+      <div class="expect-item"><span class="dot" style="background:#854F0B"></span><span>Metrics before logs: CPU, memory, DB connections, cache hit ratio</span></div>
+      <div class="expect-item"><span class="dot" style="background:#854F0B"></span><span>Knows about connection pool limits and thread pool saturation</span></div>
+      <div class="expect-item"><span class="dot" style="background:#854F0B"></span><span>Has a rollback strategy during incidents — not just fix-forward</span></div>
+      <div class="expect-item"><span class="dot" style="background:#854F0B"></span><span>Discusses cost impact when scaling — not just technical steps</span></div>
+    </div>
+    <div class="expect-card">
+      <div class="expect-label" style="color:#533">Scale evolution</div>
+      <div class="expect-item"><span class="dot" style="background:#7c3"></span><span>Can identify what breaks first under 10x traffic</span></div>
+      <div class="expect-item"><span class="dot" style="background:#7c3"></span><span>Proposes evidence-based solutions, not reflexive sharding</span></div>
+      <div class="expect-item"><span class="dot" style="background:#7c3"></span><span>Aware of tenant isolation under high-load scenarios</span></div>
+      <div class="expect-item"><span class="dot" style="background:#7c3"></span><span>Multi-region failure: DNS TTL, failover, RPO vs RTO tradeoff</span></div>
+      <div class="expect-item"><span class="dot" style="background:#7c3"></span><span>Zero-downtime migration planning with feature flags / strangler fig</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">Do's and don'ts</div>
+  <div class="dos-donts">
+    <div class="do-card">
+      <div class="dd-header"><i class="ti ti-circle-check" aria-hidden="true"></i>Do this</div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>Form a hypothesis first: "I suspect it's the DB connection pool because…"</span></div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>Go from dashboards → slow query log → connection stats → traces</span></div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>Discuss what changes you'd roll back if mitigation fails</span></div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>Reference an actual incident from your own experience</span></div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>Think out loud: "at this point I'd page the DB team and check X"</span></div>
+    </div>
+    <div class="dont-card">
+      <div class="dd-header"><i class="ti ti-circle-x" aria-hidden="true"></i>Avoid this</div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>"Check the logs" as your only initial step</span></div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>Suggesting sharding before exhausting simpler options</span></div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>Ignoring tenant isolation when discussing a scale problem</span></div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>No rollback strategy — "we'll just fix it forward"</span></div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>Treating all latency spikes as "probably a DB issue" without data</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">Sample questions — click to expand</div>
+  <div class="q-list">
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-head">
+        <span class="q-num" style="background:#FAEEDA;color:#854F0B">Q1</span>
+        <span class="q-text">API latency has spiked from 50ms to 800ms in the last 30 minutes. Traffic is unchanged. Walk me through your debugging process step by step.</span>
+        <i class="ti ti-chevron-down q-chevron" aria-hidden="true"></i>
+      </div>
+      <div class="q-body">
+        <div class="q-approach-label">Debugging framework</div>
+        <div class="q-approach">Step 1: Check service-level metrics — CPU, memory, error rate, response time distribution. Step 2: Form hypothesis. Step 3: Check downstream: DB slow query log, Redis hit ratio, upstream dependency latency. Step 4: Look at connection pool saturation (pool exhausted → threads wait). Step 5: Check for a recent deployment or config change. Step 6: Use distributed tracing to isolate which span is slow. Mitigate: increase pool size, circuit-break slow dependency, rollback deploy if correlated.</div>
+        <div class="q-signals">
+          <div class="sig-row"><span class="sig-label sig-good">Strong</span><span class="sig-text">Mentions connection pool limits and uses tracing to isolate the span</span></div>
+          <div class="sig-row"><span class="sig-label sig-bad">Weak</span><span class="sig-text">Goes straight to "check DB logs" — no hypothesis, no layered approach</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-head">
+        <span class="q-num" style="background:#FAEEDA;color:#854F0B">Q2</span>
+        <span class="q-text">Your service handled 1,000 QPS fine. It's scaling to 10,000 QPS. What breaks first? Walk through your mitigation plan.</span>
+        <i class="ti ti-chevron-down q-chevron" aria-hidden="true"></i>
+      </div>
+      <div class="q-body">
+        <div class="q-approach-label">Scale evolution framework</div>
+        <div class="q-approach">Think in layers: (1) DB connection pool — exhausted first. Fix: PgBouncer + read replicas. (2) Single app server — add horizontal scaling behind load balancer. (3) Cache hot keys — large tenants cause key contention. Fix: consistent hashing or local L1 cache. (4) Kafka throughput ceiling — add partitions. (5) Cost: calculate infra cost delta, propose reserved instances for steady-state, spot workers for burst. Also flag multi-tenant fairness — large tenants shouldn't starve small ones.</div>
+        <div class="q-signals">
+          <div class="sig-row"><span class="sig-label sig-good">Strong</span><span class="sig-text">Addresses each layer in order, mentions cost and tenant fairness</span></div>
+          <div class="sig-row"><span class="sig-label sig-bad">Weak</span><span class="sig-text">Says "add more servers" — no layered thinking or specific bottleneck</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-head">
+        <span class="q-num" style="background:#FAEEDA;color:#854F0B">Q3</span>
+        <span class="q-text">One of your three regions goes down mid-day. What's your incident response? How should your architecture have prepared for this?</span>
+        <i class="ti ti-chevron-down q-chevron" aria-hidden="true"></i>
+      </div>
+      <div class="q-body">
+        <div class="q-approach-label">Key areas to hit</div>
+        <div class="q-approach">Detection: health check failure triggers alert within 30 seconds. Rerouting: DNS failover requires low TTL (&lt;60s) — higher TTL = longer recovery. Active-active vs active-passive tradeoff: active-active is costlier but RTO is near-zero. Verify data: is replication lag acceptable? What's our RPO? Tenant communication: status page update. Postmortem: failure mode, detection gap, recovery playbook. Design requirements: multi-AZ within region is table stakes; cross-region requires async replication + conflict resolution strategy.</div>
+        <div class="q-signals">
+          <div class="sig-row"><span class="sig-label sig-good">Strong</span><span class="sig-text">Proactively mentions RPO vs RTO tradeoff and DNS TTL impact</span></div>
+          <div class="sig-row"><span class="sig-label sig-bad">Weak</span><span class="sig-text">Says "failover to another region" — no detail on how or how fast</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-head">
+        <span class="q-num" style="background:#FAEEDA;color:#854F0B">Q4</span>
+        <span class="q-text">One large tenant with 10M tickets is making queries that slow down other tenants. How do you isolate and fix this?</span>
+        <i class="ti ti-chevron-down q-chevron" aria-hidden="true"></i>
+      </div>
+      <div class="q-body">
+        <div class="q-approach-label">Key areas to hit</div>
+        <div class="q-approach">Detection: per-tenant query metrics and connection tracking reveal the noisy neighbor. Immediate mitigation: per-tenant rate limiting on API and DB query level, connection pool limits per tenant. Medium-term: move the large tenant to a dedicated read replica. Long-term: shard by tenant_id so large tenants land on their own shard. Proactive enforcement: resource quotas set at onboarding based on tier. Communicate SLA expectations to tenant during migration.</div>
+        <div class="q-signals">
+          <div class="sig-row"><span class="sig-label sig-good">Strong</span><span class="sig-text">Covers immediate, medium, and long-term fixes with quota enforcement</span></div>
+          <div class="sig-row"><span class="sig-label sig-bad">Weak</span><span class="sig-text">Only suggests "shard the DB" without addressing the immediate tenant impact</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hard-reject">
+    <div class="hr-label"><i class="ti ti-alert-triangle" aria-hidden="true"></i>Hard reject criteria</div>
+    <div class="hr-item"><i class="ti ti-x" aria-hidden="true"></i><span>Cannot reason through a scale evolution scenario with structured steps</span></div>
+    <div class="hr-item"><i class="ti ti-x" aria-hidden="true"></i><span>No production mindset — treats incidents as hypotheticals, not real events to own</span></div>
+    <div class="hr-item"><i class="ti ti-x" aria-hidden="true"></i><span>Cannot explain a real incident they personally diagnosed and fixed</span></div>
+  </div>
+</div>
+
+<div id="r4" class="round-panel">
+  <div class="round-header">
+    <div class="round-badge" style="background:#EEEDFE;color:#534AB7">R4</div>
+    <div>
+      <div class="rh-title">Hiring Manager — Ownership & Leadership</div>
+      <div class="rh-sub">45 min · Behavioral · STAR format · IC3 leadership signal</div>
+      <div class="rh-tags">
+        <span class="tag">Ownership mindset</span>
+        <span class="tag">Mentoring</span>
+        <span class="tag">Conflict resolution</span>
+        <span class="tag">Decision clarity</span>
+        <span class="tag">Cultural alignment</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">What the panel is evaluating</div>
+  <div class="expects-grid">
+    <div class="expect-card">
+      <div class="expect-label" style="color:#534AB7">Ownership + leadership</div>
+      <div class="expect-item"><span class="dot" style="background:#534AB7"></span><span>Full accountability for outcomes — not just your slice of the work</span></div>
+      <div class="expect-item"><span class="dot" style="background:#534AB7"></span><span>Decision clarity — explains the why, not just the what</span></div>
+      <div class="expect-item"><span class="dot" style="background:#534AB7"></span><span>Structured mentoring approach, not just "I reviewed their PRs"</span></div>
+      <div class="expect-item"><span class="dot" style="background:#534AB7"></span><span>Conflict resolution: advocates technically, listens, reaches a decision</span></div>
+      <div class="expect-item"><span class="dot" style="background:#534AB7"></span><span>Growth mindset: what changed after a mistake, not just the mistake itself</span></div>
+    </div>
+    <div class="expect-card">
+      <div class="expect-label" style="color:#3B6D11">Cultural alignment</div>
+      <div class="expect-item"><span class="dot" style="background:#3B6D11"></span><span>Comfortable with ambiguity — moves fast without sacrificing depth</span></div>
+      <div class="expect-item"><span class="dot" style="background:#3B6D11"></span><span>Balances speed and quality — not "move fast and break things"</span></div>
+      <div class="expect-item"><span class="dot" style="background:#3B6D11"></span><span>Cross-functional collaboration: SRE, PM, tech leads</span></div>
+      <div class="expect-item"><span class="dot" style="background:#3B6D11"></span><span>Excitement about the technical problems Freshworks solves</span></div>
+      <div class="expect-item"><span class="dot" style="background:#3B6D11"></span><span>Senior IC aspiration — depth over people management</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">STAR format reminder</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem">
+    <div class="star-card"><div class="star-letter">S — Situation</div><div class="star-desc">Set the context. One or two sentences. Don't over-explain the background.</div></div>
+    <div class="star-card"><div class="star-letter">T — Task</div><div class="star-desc">What was your specific role or responsibility in this situation?</div></div>
+    <div class="star-card"><div class="star-letter">A — Action</div><div class="star-desc">What did you do? Be specific. "I" not "we." This is the bulk of your answer.</div></div>
+    <div class="star-card"><div class="star-letter">R — Result</div><div class="star-desc">What changed? Quantify where possible. Include what you learned.</div></div>
+  </div>
+
+  <div class="section-label">Do's and don'ts</div>
+  <div class="dos-donts">
+    <div class="do-card">
+      <div class="dd-header"><i class="ti ti-circle-check" aria-hidden="true"></i>Do this</div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>Use "I" — the panel is evaluating you, not your team</span></div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>Have specific mentoring examples: 1:1 structure, code review approach, growth outcome</span></div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>In conflict stories, show you listened before pushing back</span></div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>Quantify results: "reduced P99 latency by 40%", "onboarded 2 engineers in 3 months"</span></div>
+      <div class="dd-item"><i class="ti ti-check" aria-hidden="true"></i><span>Show what changed in your process after a mistake — not just regret</span></div>
+    </div>
+    <div class="dont-card">
+      <div class="dd-header"><i class="ti ti-circle-x" aria-hidden="true"></i>Avoid this</div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>Blaming teammates, PMs, or leadership for failures</span></div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>"Ops/SRE handled the incident" — own the outcome regardless of team</span></div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>Saying you've never had a serious conflict — it signals low self-awareness</span></div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>Compensation-only motivation — show what excites you technically</span></div>
+      <div class="dd-item"><i class="ti ti-x" aria-hidden="true"></i><span>Vague mentoring: "I helped them grow" needs specifics</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">Sample questions — click to expand</div>
+  <div class="q-list">
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-head">
+        <span class="q-num" style="background:#EEEDFE;color:#534AB7">Q1</span>
+        <span class="q-text">Tell me about a production incident you personally owned — detection, diagnosis, fix, and what changed after.</span>
+        <i class="ti ti-chevron-down q-chevron" aria-hidden="true"></i>
+      </div>
+      <div class="q-body">
+        <div class="q-approach-label">What they're listening for</div>
+        <div class="q-approach">End-to-end ownership: you detected or were paged, you diagnosed (not just "found the bug"), you fixed or coordinated the fix, and you led the postmortem. Red flag: "I helped the team debug it." Green flag: "I owned the incident bridge, identified the DB connection pool exhaustion, implemented PgBouncer as immediate mitigation, and then wrote the postmortem that led us to add per-tenant connection limits."</div>
+        <div class="q-signals">
+          <div class="sig-row"><span class="sig-label sig-good">Strong</span><span class="sig-text">Owns the outcome end-to-end, mentions what system changed afterward</span></div>
+          <div class="sig-row"><span class="sig-label sig-bad">Weak</span><span class="sig-text">"Ops handled the paging, I just helped debug" — no ownership arc</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-head">
+        <span class="q-num" style="background:#EEEDFE;color:#534AB7">Q2</span>
+        <span class="q-text">Describe the hardest technical tradeoff you've made. What were the options, what did you choose, and what happened?</span>
+        <i class="ti ti-chevron-down q-chevron" aria-hidden="true"></i>
+      </div>
+      <div class="q-body">
+        <div class="q-approach-label">What they're listening for</div>
+        <div class="q-approach">The panel wants to see you reason in tradeoffs, not just solutions. Pick something real and specific: consistency vs availability, build vs buy, velocity vs tech debt. Structure: "We had options A and B. A gave us X but cost Y. B avoided Y but introduced Z. We chose B because [business context]. In retrospect, I'd change [specific thing] because [what you learned]." The retrospective is what elevates a good answer to a great one.</div>
+        <div class="q-signals">
+          <div class="sig-row"><span class="sig-label sig-good">Strong</span><span class="sig-text">Names a real, specific tradeoff and reflects on what they'd do differently</span></div>
+          <div class="sig-row"><span class="sig-label sig-bad">Weak</span><span class="sig-text">Generic answer: "we had to balance speed and quality" — no specifics</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-head">
+        <span class="q-num" style="background:#EEEDFE;color:#534AB7">Q3</span>
+        <span class="q-text">Walk me through how you've mentored a junior engineer. What was your approach, and what was the measurable outcome?</span>
+        <i class="ti ti-chevron-down q-chevron" aria-hidden="true"></i>
+      </div>
+      <div class="q-body">
+        <div class="q-approach-label">What they're listening for</div>
+        <div class="q-approach">This role requires mentoring 2–4 engineers. The panel wants structure, not intention. Strong answer: "I ran weekly 1:1s with a specific agenda — one technical topic, one career topic. I assigned increasingly complex tasks with scaffolding: first they shadowed, then co-built, then owned with my review. After 3 months, they led their first feature end-to-end." Weak answer: "I was always available and reviewed their PRs" — no structure, no growth measurement.</div>
+        <div class="q-signals">
+          <div class="sig-row"><span class="sig-label sig-good">Strong</span><span class="sig-text">Has a structured mentoring framework and can describe a concrete outcome</span></div>
+          <div class="sig-row"><span class="sig-label sig-bad">Weak</span><span class="sig-text">"I helped them with their code" — no intentional growth arc</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-head">
+        <span class="q-num" style="background:#EEEDFE;color:#534AB7">Q4</span>
+        <span class="q-text">Tell me about a significant mistake you made in a technical decision. What did you learn and what changed?</span>
+        <i class="ti ti-chevron-down q-chevron" aria-hidden="true"></i>
+      </div>
+      <div class="q-body">
+        <div class="q-approach-label">What they're listening for</div>
+        <div class="q-approach">Self-awareness and a growth arc. The mistake itself is less important than what you changed. Structure: what the decision was, why it seemed right at the time, what went wrong, what you learned, and specifically what changed in your process or your team's practices afterward. Avoid picking something trivial ("I had a typo in prod") or something so severe it raises concerns. A good mistake shows you were operating at the edge of your experience — which means you were growing.</div>
+        <div class="q-signals">
+          <div class="sig-row"><span class="sig-label sig-good">Strong</span><span class="sig-text">Specific mistake, genuine reflection, process change that came from it</span></div>
+          <div class="sig-row"><span class="sig-label sig-bad">Weak</span><span class="sig-text">"I can't think of a major mistake" — low self-awareness, immediate red flag</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hard-reject">
+    <div class="hr-label"><i class="ti ti-alert-triangle" aria-hidden="true"></i>Hard reject criteria</div>
+    <div class="hr-item"><i class="ti ti-x" aria-hidden="true"></i><span>No ownership stories — every result is attributed to "the team"</span></div>
+    <div class="hr-item"><i class="ti ti-x" aria-hidden="true"></i><span>Low accountability — blame pattern across multiple answers</span></div>
+    <div class="hr-item"><i class="ti ti-x" aria-hidden="true"></i><span>No leadership potential for an IC3 role — cannot describe influencing direction</span></div>
+  </div>
+</div>
+
+<div class="section-label">Universal tips for all 4 rounds</div>
+<div class="tips-grid">
+  <div class="tip-card"><i class="ti ti-message-2 tip-icon" aria-hidden="true"></i><div class="tip-text"><strong>Think out loud.</strong> Interviewers score your process, not just the answer. Silence is the enemy.</div></div>
+  <div class="tip-card"><i class="ti ti-zoom-question tip-icon" aria-hidden="true"></i><div class="tip-text"><strong>Clarify first.</strong> Spending 5 minutes on requirements is a strong signal, not lost time.</div></div>
+  <div class="tip-card"><i class="ti ti-calculator tip-icon" aria-hidden="true"></i><div class="tip-text"><strong>Estimate before choosing.</strong> Numbers justify tech choices. "At 10K QPS, a single Redis node suffices."</div></div>
+  <div class="tip-card"><i class="ti ti-alert-circle tip-icon" aria-hidden="true"></i><div class="tip-text"><strong>Bring up failures early.</strong> Don't wait to be asked. Proactively addressing failure scenarios is a senior signal.</div></div>
+  <div class="tip-card"><i class="ti ti-scales tip-icon" aria-hidden="true"></i><div class="tip-text"><strong>Speak in tradeoffs.</strong> "We chose X over Y because…" is always stronger than just "we chose X."</div></div>
+  <div class="tip-card"><i class="ti ti-user-check tip-icon" aria-hidden="true"></i><div class="tip-text"><strong>Show ownership throughout.</strong> Use "I" in behavioral rounds. Own outcomes across every round, not just R4.</div></div>
+</div>
+
+</div>
+
+<script>
+function switchTab(id, el) {
+  document.querySelectorAll('.round-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.rtab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleQ(card) {
+  card.classList.toggle('open');
+}
+</script>
